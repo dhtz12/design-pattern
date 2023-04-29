@@ -6,4 +6,4 @@ design-patterns/README.MD
    - event/normal 文件夹内是一个简单的事件设计模式的实现包含了事件的注册、触发、移除等功能。
    
    - event/spring 文件夹内是利用spring的ApplicationEventPublisher和ApplicationListener实现的事件设计模式。
-   
+     spring 模式中有两种实现方式，一种是继承ApplicationListener，一种是注解@EventListener。
