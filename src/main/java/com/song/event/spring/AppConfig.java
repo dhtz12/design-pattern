@@ -2,6 +2,7 @@ package com.song.event.spring;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * packageName:com.song.event.spring
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("com.song.event.spring")
+@EnableAsync
 public class AppConfig {
 
 

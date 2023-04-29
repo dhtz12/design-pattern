@@ -1,6 +1,7 @@
 package com.song.event.spring;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,7 +17,7 @@ public class OrderApplicationListener {
     public void orderPaySmsApplicationListener(OrderPayApplicationEvent event) {
         System.out.println( "订单支付成功，发送短信".concat( event.getOrderId() ) );
     }
-
+    @Async
     @EventListener
     public void orderCreateSmsApplicationListener(OrderCreateApplicationEvent event) {
         System.out.println( "订单创建成功，发送短信".concat( event.getOrderId() ) );
