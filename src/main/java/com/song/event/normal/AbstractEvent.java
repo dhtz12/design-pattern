@@ -8,11 +8,11 @@ package com.song.event.normal;
  */
 public abstract class AbstractEvent {
 
-      private Object object;
+    private Object object;
 
-      public AbstractEvent(Object object) {
-            this.object = object;
-      }
+    public AbstractEvent(Object object) {
+        this.object = object;
+    }
 
     public Object getObject() {
         return object;
