@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -35,3 +36,7 @@ build/
 ### VS Code ###
 .vscode/
 /.mvn/
+=======
+.idea/
+target/
+>>>>>>> a33032962257fef32b1825a6b8a67ad09e055b7b
