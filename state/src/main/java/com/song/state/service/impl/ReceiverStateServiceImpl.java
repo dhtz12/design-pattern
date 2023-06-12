@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * desc:
  */
 @Service
-public class ReceiveStateServiceImpl extends OrderAbstractStateServiceImpl {
+public class ReceiverStateServiceImpl extends OrderAbstractStateServiceImpl {
 
 
     @Override

@@ -16,7 +16,6 @@ public class StateApplicationTests {
     public void testPay() {
         Order order = orderService.create();
         orderService.pay( order );
-        orderService.pay( order );
         orderService.deliver( order );
         orderService.receive( order );
     }
