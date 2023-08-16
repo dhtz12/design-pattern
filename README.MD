@@ -239,9 +239,12 @@ public class ReceiverStateServiceImpl extends OrderAbstractStateServiceImpl {
 
 今天我们就一起来了解一下在 SpringBoot 中如何应用责任链模式！
 
+![image-20230816110753811](责任链模式.assets/image-20230816110753811.png)
+
 ### **二、代码实践**
 
 我们以某下单流程为例，将其切成多个独立检查逻辑，采用责任链设计模式来编程，代码实践如下！
+![image-20230816110811334](责任链模式.assets/image-20230816110811334.png)
 
 ~~~
 
