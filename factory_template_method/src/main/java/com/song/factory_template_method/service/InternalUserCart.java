@@ -21,7 +21,7 @@ public class InternalUserCart extends AbstractCart {
     }
 
     @Override
-    public int getUserType() {
+    public int supportUserType() {
         return 1;
     }
 }

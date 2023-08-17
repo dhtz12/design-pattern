@@ -338,4 +338,153 @@ public class CalculatorServiceTest {
 
 ~~~
 
+## 4. factory-template-method-design-pattern
+
+定义用户购物车接口IUserCart
+~~~
+public interface IUserCart {
+
+    public Cart process(long userId, Map<Long, Integer> items);
+
+    public int getUserType();
+}
+//定义抽象父类
+public abstract class AbstractCart implements IUserCart{
+    //处理购物车的大量重复逻辑在父类实现
+    @Override
+    public Cart process(long userId, Map<Long, Integer> items) {
+
+        Cart cart = new Cart();
+
+        List<Item> itemList = new ArrayList<>();
+        items.entrySet().stream().forEach(entry -> {
+            Item item = new Item();
+            item.setId(entry.getKey());
+            item.setPrice(new BigDecimal(10));
+            item.setQuantity(entry.getValue());
+            itemList.add(item);
+        });
+        cart.setItems(itemList);
+        //让子类处理每一个商品的优惠  
+        itemList.stream().forEach(item -> {
+            processCouponPrice(userId, item);
+            processDeliveryPrice(userId, item);
+        });
+        //计算商品总价  
+        cart.setTotalItemPrice(cart.getItems().stream().map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add));
+        //计算总运费  
+        cart.setTotalDeliveryPrice(cart.getItems().stream().map(Item::getDeliveryPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
+        //计算总折扣  
+        cart.setTotalDiscount(cart.getItems().stream().map(Item::getCouponPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
+        //计算应付价格  
+        cart.setPayPrice(cart.getTotalItemPrice().add(cart.getTotalDeliveryPrice()).subtract(cart.getTotalDiscount()));
+        return cart;
+    }
+
+    //处理商品优惠的逻辑留给子类实现  
+    protected abstract void processCouponPrice(long userId, Item item);
+
+    //处理配送费的逻辑留给子类实现  
+    protected abstract void processDeliveryPrice(long userId, Item item);
+}  
+~~~
+定义具体类型的子类
+~~~
+@Service(value = "InternalUserCart")
+@Slf4j
+public class InternalUserCart extends AbstractCart {  
+    @Override  
+    protected void processCouponPrice(long userId, Item item) {
+        log.info("processCouponPrice->InternalUserCart");
+        item.setCouponPrice(BigDecimal.ZERO);
+    }  
+  
+    @Override  
+    protected void processDeliveryPrice(long userId, Item item) {  
+        item.setDeliveryPrice(BigDecimal.ZERO);  
+    }
+
+    @Override
+    public int supportUserType() {
+        return 1;
+    }
+}
+
+@Service(value = "NormalUserCart")
+@Slf4j
+public class NormalUserCart extends AbstractCart {  
+  
+    @Override  
+    protected void processCouponPrice(long userId, Item item) {
+        log.info("processCouponPrice->NormalUserCart");
+        item.setCouponPrice(BigDecimal.ZERO);
+    }  
+  
+    @Override  
+    protected void processDeliveryPrice(long userId, Item item) {  
+        item.setDeliveryPrice(item.getPrice()  
+                .multiply(BigDecimal.valueOf(item.getQuantity()))  
+                .multiply(new BigDecimal("0.1")));  
+    }
+
+    @Override
+    public int supportUserType() {
+        return 2;
+    }
+}
+
+@Service(value = "VipUserCart")
+@Slf4j
+public class VipUserCart extends AbstractCart {
+
+    @Override
+    protected void processCouponPrice(long userId, Item item) {
+        log.info("processCouponPrice->VipUserCart");
+        if (item.getQuantity() > 2) {
+            item.setCouponPrice(item.getPrice()
+                    .multiply(BigDecimal.valueOf(100 - 40).divide(new BigDecimal("100")))
+                    .multiply(BigDecimal.valueOf(item.getQuantity() - 2)));
+        } else {
+            item.setCouponPrice(BigDecimal.ZERO);
+        }
+    }
+
+    @Override
+    protected void processDeliveryPrice(long userId, Item item) {
+        item.setDeliveryPrice(BigDecimal.ZERO);
+    }
+
+    @Override
+    public int supportUserType() {
+        return 3;
+    }
+}
+~~~
+测试类
+
+~~~
+@SpringBootTest
+class FactoryTemplateMethodApplicationTests {
+
+    @Autowired
+    private List<IUserCart> userCartList;
+
+
+    @Test
+    public void addCart() {
+        int userType = 1;
+        long userId = 1;
+        Map<Long, Integer> itemMap = new HashMap<>();
+        itemMap.put(1L, 2);
+        Optional.ofNullable(userCartList)
+                .map(cartList -> cartList.stream()
+                        .filter(cart -> cart.supportUserType() == userType)
+                        .collect(Collectors.toList())).orElseThrow(() -> new IllegalArgumentException("")).forEach(cart -> cart.process(userId, itemMap));
+
+    }
+
+}
+~~~
+
+
 

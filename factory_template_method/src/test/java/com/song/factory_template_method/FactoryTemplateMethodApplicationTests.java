@@ -1,6 +1,5 @@
 package com.song.factory_template_method;
 
-import com.song.factory_template_method.service.AbstractCart;
 import com.song.factory_template_method.service.IUserCart;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +20,13 @@ class FactoryTemplateMethodApplicationTests {
 
     @Test
     public void addCart() {
-
         int userType = 1;
         long userId = 1;
         Map<Long, Integer> itemMap = new HashMap<>();
         itemMap.put(1L, 2);
-
-
         Optional.ofNullable(userCartList)
                 .map(cartList -> cartList.stream()
-                        .filter(cart -> cart.getUserType() == userType)
+                        .filter(cart -> cart.supportUserType() == userType)
                         .collect(Collectors.toList())).orElseThrow(() -> new IllegalArgumentException("")).forEach(cart -> cart.process(userId, itemMap));
 
     }

@@ -24,7 +24,7 @@ public class NormalUserCart extends AbstractCart {
     }
 
     @Override
-    public int getUserType() {
+    public int supportUserType() {
         return 2;
     }
 }

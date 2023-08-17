@@ -28,7 +28,7 @@ public class VipUserCart extends AbstractCart {
     }
 
     @Override
-    public int getUserType() {
+    public int supportUserType() {
         return 3;
     }
 }

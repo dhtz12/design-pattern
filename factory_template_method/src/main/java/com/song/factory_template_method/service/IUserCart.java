@@ -8,5 +8,5 @@ public interface IUserCart {
 
     public Cart process(long userId, Map<Long, Integer> items);
 
-    public int getUserType();
+    public int supportUserType();
 }
