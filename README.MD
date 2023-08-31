@@ -488,3 +488,9 @@ class FactoryTemplateMethodApplicationTests {
 
 
 
+
+
+##5.  策略模式（Strategy Pattern）
+
+詳見内部strategy 模块
+
