@@ -18,6 +18,7 @@ public class StateApplicationTests {
         orderService.pay( order );
         orderService.deliver( order );
         orderService.receive( order );
+
     }
 
 }
